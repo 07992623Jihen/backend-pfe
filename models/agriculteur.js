@@ -8,10 +8,10 @@ const agriculteurSchema = new schema({
     email:{type:String,required:true,unique:true},
     password:{type:String,required:true,minlenght:8},
     tel:{type:String,required:true},
+    bloque:{type:Boolean,required:true},
     demandeE:[{type:mongoose.Types.ObjectId,required:true,ref:'demandeE'}],
-    demandeT:[{type:mongoose.Types.ObjectId,required:true,ref:'demandeT'}]
-
-
+    demandeT:[{type:mongoose.Types.ObjectId,required:true,ref:'demandeTraitement'}],
+    messages:[{type:mongoose.Types.ObjectId,required:true,ref:'message'}]
 })
 
 agriculteurSchema.plugin(uniqueValidator)

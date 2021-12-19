@@ -44,5 +44,6 @@ check('password')
 route.get('/',agriculteurControllers.getAgriculteur)
 route.get('/:id',agriculteurControllers.getAgriculteurById)
 route.delete('/:id',agriculteurControllers.deleteAgriculteur)
+route.patch('/bloque/:id',agriculteurControllers.bloqueAgriculteur)
 
 module.exports=route

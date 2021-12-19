@@ -16,7 +16,6 @@ route.post(
   check("name").not().isEmpty(),
   check("tel").not().isEmpty(),
   check("email").normalizeEmail(),
-  check("password").isLength({ min: 8 }),
   ingenieurControllers.signup
 );
 
@@ -32,11 +31,12 @@ route.patch(
   check("name").not().isEmpty(),
   check("tel").not().isEmpty(),
   check("email").normalizeEmail(),
-  check("password").isLength({ min: 8 }),
   ingenieurControllers.updateIngenieur
 );
 
 route.get("/", ingenieurControllers.getIngenieur);
+route.get("/:id", ingenieurControllers.getIngenieurById);
 route.delete("/:id", ingenieurControllers.deleteIngenieur);
+route.patch("/bloque/:id", ingenieurControllers.bloqueIngenieur);
 
 module.exports = route;

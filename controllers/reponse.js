@@ -4,6 +4,7 @@ const reponse = require("../models/reponce");
 const demandeTraitement = require("../models/demande-traitement");
 
 const { validationResult } = require("express-validator");
+const reponce = require("../models/reponce");
 
 const ajout = async (req, res, next) => {
   const {
@@ -43,10 +44,11 @@ const ajout = async (req, res, next) => {
     herbicide,
   });
 
-  existingDemande.res = createReponce;
+  console.log(existingDemande);
 
   try {
     createReponce.save();
+    existingDemande.res.push(createReponce)
     existingDemande.save();
   } catch (err) {
     const error = new httpError("failed ajout", 500);
@@ -102,6 +104,34 @@ const updateImageAvance = async (req, res, next) => {
   res.status(200).json({ existingReponse });
 };
 
+const getReponceByDemanadeId = async (req, res, next) => {
+  const id = req.params.id;
+
+  let existingReponce;
+  try {
+    existingReponce = await demandeTraitement.findById(id).populate("res");
+  } catch (err) {
+    const error = new httpError(
+      "Fetching mauvaise herbe failed, please try again later.",
+      500
+    );
+    return next(error);
+  }
+
+  if (!existingReponce || existingReponce.res.length === 0) {
+    return next(
+      new httpError("Pas de reponce pour cette plante.", 404)
+    );
+  }
+
+  res.json({
+    reponces: existingReponce.res.map((el) =>
+      el.toObject({ getters: true })
+    ),
+  });
+};
+
 exports.ajout = ajout;
 exports.updateImageAdulte = updateImageAdulte;
 exports.updateImageAvance = updateImageAvance;
+exports.getReponceByDemanadeId = getReponceByDemanadeId

@@ -18,4 +18,6 @@ route.post(
   reponseController.updateImageAvance
 );
 
+route.get('/demande/:id',reponseController.getReponceByDemanadeId)
+
 module.exports = route;

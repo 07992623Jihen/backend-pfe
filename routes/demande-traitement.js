@@ -14,6 +14,7 @@ route.post(
 );
 
 route.get('/',demandeTraitementControllers.getDemandeDeTraitement)
+route.get('/agriculteur/:id',demandeTraitementControllers.getDemandeByAgriculteurId)
 
 
 module.exports = route;

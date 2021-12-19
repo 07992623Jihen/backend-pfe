@@ -12,7 +12,8 @@ const mauvaiseHerbeRoutes = require("./routes/mauvaiseHerbe");
 const herbicideRoutes = require("./routes/herbicide");
 const demandeTraitementRoutes = require("./routes/demande-traitement");
 const reponseRoute = require("./routes/reponse");
-
+const adminRoutes = require("./routes/admin");
+const messageRoute = require("./routes/message");
 
 app.use(bodyParser.json());
 
@@ -36,6 +37,10 @@ app.use("/api/mauvaiseHerbe", mauvaiseHerbeRoutes);
 app.use("/api/herbicide", herbicideRoutes);
 app.use("/api/demandeTraitement", demandeTraitementRoutes);
 app.use("/api/reponse", reponseRoute);
+app.use("/api/admin", adminRoutes);
+app.use("/api/message", messageRoute);
+
+
 app.use((req, res, next) => {
   const error = new httperror("could not find that page", 404);
   throw error;
