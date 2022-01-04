@@ -21,9 +21,13 @@ const sendMessage = async (req, res, next) => {
     return next(error);
   }
 
+  console.log(existingAgriculteur)
+
+  
+
   try {
-    createdMessage.save();
-  existingAgriculteur.messages.push(createdMessage);
+    await createdMessage.save();
+    existingAgriculteur.messages.push(createdMessage);
     existingAgriculteur.save();
   } catch (err) {
     const error = new httpError("failed signup", 500);
