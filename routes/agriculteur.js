@@ -23,10 +23,10 @@ check('password')
 
 route.post('/login', 
 check('email')
-.normalizeEmail(),
+.isEmpty(),
 check('password')
 .isLength({min:8})
-,agriculteurControllers.login)
+,agriculteurControllers.login2)
 
 route.patch('/:id', 
 check('name')

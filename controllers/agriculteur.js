@@ -14,17 +14,22 @@ const signup = async (req, res, next) => {
 
   const { name, prenom, email, password, tel } = req.body;
   let existingAgriculteur;
+  console.log(email)
+  console.log(password)
   try {
     existingAgriculteur = await agriculteur.findOne({ email: email });
   } catch (err) {
     const error = new httpError("problems!!!", 500);
     return next(error);
   }
+  console.log(existingAgriculteur)
 
   if (existingAgriculteur) {
     const error = new httpError("agriculteur exist", 422);
     return next(error);
   }
+
+  
 
   const createdagriculteur = new agriculteur({
     name,
@@ -65,6 +70,40 @@ const signup = async (req, res, next) => {
       token: token,
     });
 };
+const login2 = async (req,res,next)=>{
+
+  const { email, password } = req.body;
+  let existingAgriculteur;
+  console.log(email)
+  console.log(password)
+  try {
+    existingAgriculteur = await agriculteur.findOne({ email: email });
+  } catch (err) {
+    const error = new httpError("problems!!!", 500);
+    return next(error);
+  }
+
+  console.log(existingAgriculteur)
+
+  
+  if (!existingAgriculteur || existingAgriculteur.password !== password) {
+    return next(new httpError("invalid  ", 422));
+  }
+
+  let token;
+  try {
+    token = jwt.sign(
+      { id: existingAgriculteur.id, email: existingAgriculteur.email },
+      "secret-thinks",
+      { expiresIn: "1h" }
+    );
+  } catch (err) {
+    const error = new httpError("failed signup try again later", 500);
+    return next(error);
+  }
+  res.status(200).json({ agriculteur: existingAgriculteur, token: token });
+
+}
 
 const login = async (req, res, next) => {
   const error = validationResult(req);
@@ -73,15 +112,23 @@ const login = async (req, res, next) => {
   }
 
   const { email, password } = req.body;
-  let existingAgriculteur;
+  
 
+  console.log(email)
+  console.log(password)
+
+  let existingAgriculteur;
   try {
+    console.log(email)
     existingAgriculteur = await agriculteur.findOne({ email: email });
-  } catch {
-    return next(new httpError("ivalid input passed", 422));
+  } catch (err) {
+    const error = new httpError("problems!!!", 500);
+    return next(error);
   }
+  console.log(existingAgriculteur)
+
   if (!existingAgriculteur || existingAgriculteur.password !== password) {
-    return next(new httpError("invalid input passed ", 422));
+    return next(new httpError("invalid  ", 422));
   }
 
   let token;
@@ -101,7 +148,7 @@ const login = async (req, res, next) => {
 const getAgriculteur = async (req, res, next) => {
   let existingAgriculteur;
   try {
-    existingAgriculteur = await agriculteur.find({}, "-password");
+    existingAgriculteur = await agriculteur.find();
   } catch {
     const error = new httpError("failed signup try again later", 500);
     return next(error);
@@ -172,7 +219,7 @@ const deleteAgriculteur = async (req, res, next) => {
 };
 
 const bloqueAgriculteur = async (req, res, next) => {
-  const error = validationResult(req);
+  const error = validationResult(req);ssq
   if (!error.isEmpty()) {
     return next(new httpError("invalid input passed ", 422));
   }
@@ -205,3 +252,4 @@ exports.getAgriculteurById = getAgriculteurById;
 exports.updateAgriculteur = updateAgriculteur;
 exports.deleteAgriculteur = deleteAgriculteur;
 exports.bloqueAgriculteur = bloqueAgriculteur
+exports.login2 = login2
